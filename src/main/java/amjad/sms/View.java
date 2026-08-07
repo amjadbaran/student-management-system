@@ -1,5 +1,6 @@
 package amjad.sms;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
@@ -8,7 +9,7 @@ public class View {
 
     public void start() {
         showMenu();
-    };
+    }
 
     private void showMenu() {
         while (true) { 
@@ -47,29 +48,41 @@ public class View {
 
     private String getInput() {
         System.out.print("$ >>> ");
-        String input = scanner.next();
-        return input;
+        return scanner.next();
     } 
 
     private String getInput(String fieldName) {
         System.out.print(fieldName + ": ");
         if (fieldName.equalsIgnoreCase("id")) {
             String input = scanner.next();
-            scanner.nextLine();
+            scanner.nextLine(); // Clear buffer
             return input;
         }
 
-        String input = scanner.nextLine();
-        return input;
+        return scanner.nextLine();
     }
 
     private void seeAll() {
-        controller.getAll();
+        List<Student> students = controller.getAllStudents();
+
+        if (students.isEmpty()) {
+            System.out.println("No records found");
+        } else {
+            for (Student student : students) {
+                System.out.println(student);
+            }
+        }
     }
 
     private void seeOne() {
         int id = Integer.parseInt(getInput("ID"));
-        controller.getOne(id);
+        Student student = controller.getStudent(id);
+
+        if (student != null) {
+            System.out.println(student);
+        } else {
+            System.out.println("Student does not exist");
+        }
     }
 
     private void add() {
@@ -78,7 +91,13 @@ public class View {
         String program = getInput("Program");
 
         Student student = new Student(id, name, program);
-        controller.add(student);
+        boolean success = controller.addStudent(student);
+
+        if (success) {
+            System.out.println("Student added successfully.");
+        } else {
+            System.out.println("Failed to add student. Invalid ID (must be > 0) or ID already exists.");
+        }
     }
 
     private void update() {
@@ -87,11 +106,23 @@ public class View {
         String program = getInput("New Program");
 
         Student student = new Student(id, name, program);
-        controller.update(student);
+        boolean success = controller.updateStudent(student);
+
+        if (success) {
+            System.out.println("Student updated successfully");
+        } else {
+            System.out.println("Student does not exist");
+        }
     }
 
     private void delete() {
         int id = Integer.parseInt(getInput("ID"));
-        controller.delete(id);
+        boolean success = controller.deleteStudent(id);
+
+        if (success) {
+            System.out.println("Student deleted successfully");
+        } else {
+            System.out.println("Student does not exist");
+        }
     }
 }

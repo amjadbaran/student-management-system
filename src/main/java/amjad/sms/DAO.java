@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +13,12 @@ public class DAO {
 
     public List<Student> retrieveAllRecords() {
         List<Student> students = new ArrayList<>();
-
         String sql = "SELECT * FROM students";
 
-        try (Connection conn = DatabaseConfig.gConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DatabaseConfig.gConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql); 
+             ResultSet rs = ps.executeQuery()) {
+            
             while (rs.next()) {
                 Student student = new Student();
                 student.setID(rs.getInt("id"));
@@ -36,7 +37,9 @@ public class DAO {
     public Student retrieveOneRecord(int id) {
         String sql = "SELECT * FROM students WHERE id = ?"; 
 
-        try (Connection conn = DatabaseConfig.gConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.gConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
             ps.setInt(1, id); 
             
             try (ResultSet rs = ps.executeQuery()) {
@@ -56,28 +59,31 @@ public class DAO {
         return null;
     }
 
-    public void addRecord(Student student) {
+    public boolean addRecord(Student student) {
         String sql = "INSERT INTO students (id, name, program) VALUES (?, ?, ?)";
 
-        try (Connection conn = DatabaseConfig.gConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.gConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
             ps.setInt(1, student.getID());
             ps.setString(2, student.getName());
             ps.setString(3, student.getProgram());
 
             int rowsAffected = ps.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Student added successfully.");
-            }
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     public boolean updateRecord(Student student) {
         String sql = "UPDATE students SET name = ?, program = ? WHERE id = ?";
 
-        try (Connection conn = DatabaseConfig.gConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.gConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
             ps.setString(1, student.getName());
             ps.setString(2, student.getProgram());
             ps.setInt(3, student.getID());
@@ -94,11 +100,13 @@ public class DAO {
     public boolean deleteRecord(int id) {
         String sql = "DELETE FROM students WHERE id = ?";
 
-        try (Connection conn = DatabaseConfig.gConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.gConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
             ps.setInt(1, id);
 
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0; // Returns true if a record was actually deleted, false otherwise
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
