@@ -1,0 +1,27 @@
+# --- Maven ---
+target/
+.mvn/
+
+# --- IDEs (VS Code & IntelliJ) ---
+.vscode/
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# --- Database & Local Storage ---
+sms.db
+*.db
+*.sqlite
+
+# --- Java Compiled Files & Logs ---
+*.class
+hs_err_pid*
+logs/
+*.log
+
+# --- Operating System Files ---
+.DS_Store          # macOS
+Thumbs.db          # Windows
+ehthumbs.db        # Windows
