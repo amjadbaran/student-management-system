@@ -1,10 +1,8 @@
 package amjad.sms;
 
-import amjad.sms.DatabaseInitializer;
-
 public class App {
     public static void main(String[] args) {
-        DatabaseInitializer.initialize();
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.SEVERE);
 
         View view = new View();
         view.start();

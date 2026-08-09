@@ -1,8 +1,18 @@
 package amjad.sms;
+import jakarta.persistence.*;
 
+@Entity 
+@Table(name = "students")
 public class Student {
+
+    @Id 
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "program", nullable = false)
     private String program;
 
     public Student () {}

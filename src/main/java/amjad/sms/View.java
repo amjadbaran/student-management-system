@@ -38,6 +38,7 @@ public class View {
                     delete();
                 } else if (input == 6) {
                     System.out.println("Goodbye!");
+                    HibernateUtil.shutdown();
                     break;
                 }
             } catch (Exception e) {
